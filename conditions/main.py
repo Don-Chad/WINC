@@ -3,55 +3,54 @@ __winc_id__ = '25596924dffe436da9034d43d0af6791'
 __human_name__ = 'conditions'
 
 # Add your code after this line
-
 def farm_action(weather, time_of_day, cow_milking_status, location_of_cows, season, slurry_tank, grass_status):
-    actions = ""
-    action_number = 0
+    actions = "wait"
+    before_action = "take cows to cowshed\n"
+    action_after = "take cows back to pasture"
+
     
-    if (location_of_cows == "pasture" and time_of_day == "night") or weather == "rainy":
-        actions = actions + ("take cows to cowshed")
-        location_of_cows = "cowshed"
-    
-    if cow_milking_status and location_of_cows == "cowshed":
-        actions = actions + ("*milk cows")
-    
-    if (slurry_tank and location_of_cows == "cowshed" and weather not in ["sunny", "windy"]):
-        actions = actions +("*fertilize pasture")
-    
-    if grass_status and season == "spring" and weather == "sunny" and location_of_cows != "pasture":
-        actions = actions + ("*mow grass")
-    
-    if not actions:
-        actions = actions + ("*wait")
-    
-    if location_of_cows == "cowshed" and actions[-1] in ["milk cows", "fertilize pasture", "mow grass"]:
-        actions = actions + ("*take cows back to pasture")
-    if actions == "":
-        Print("no actions")
-    else:
+    if cow_milking_status == True and location_of_cows == "pasture":
+        actions = before_action
+        
+
+
+    if weather == "rainhy" or (location_of_cows == "pasture" and time_of_day == "night"):
+        actions = ""
         print(actions)
+        return actions
 
-s = actions
+    
+    
+    if cow_milking_status == True and location_of_cows == "cowshed":
+        actions = ("milk cows")
+        print("milk cows")
+        return actions
 
-count = 0
-output = ''
-start_pos = s.find('*')
-while start_pos != -1:
-    count += 1
-    output += s[:start_pos]
-    s = s[start_pos+1:]
-    start_pos = s.find('*')
-output += s
-if count >= 2:
-    output = output + '\n' * (count - 1)
+    if slurry_tank == True and location_of_cows == "pasture" and weather not in ["sunny", "windy"]:
+        actions = ("take cows to cowshed\n" + "fertilize pasture\n" + "take cows back to pasture")
+        print(actions)
+        return actions
+
+    if slurry_tank == True and location_of_cows == "cowshed" and weather not in ["sunny", "windy"]:
+        actions = "fertilize pasture"
+        print(actions)
+        return actions
+
+    if grass_status == True and season == "spring" and weather == "sunny" and location_of_cows == "pasture":
+        actions = "take cows to cowshed\n" + "mow grass\n" + "take cows back to pasture" 
+        print(actions)
+        return actions
+
+    if grass_status == True and season == "spring" and weather == "sunny" and location_of_cows != "pasture":
+        actions = ("mow grass")
+        print(actions)
+        return actions
+
+    else:
+        actions = ("wait")
+        print(actions)
+        return actions
+
+print(farm_action('sunny', 'day', True, 'pasture', 'spring', False, True))
 
 
-input_string = "This is a *test* string *with* stars"
-output_string, star_count = remove_and_count_stars(input_string)
-print("Output String:", output_string)
-print("Star Count:", star_count)
-
-
-
-farm_action("rainy", "night", True, "cowshed", "winter", True, True)
- 
